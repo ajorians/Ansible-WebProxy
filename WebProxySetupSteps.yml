@@ -17,4 +17,5 @@
 - import_playbook: Tasks/InstallVSFTP.yml
 
 - import_playbook: Tasks/InstallApache2.yml
+- import_playbook: Tasks/InstallPhp.yml
 #- import_playbook: Tasks/SetupSyncApachePage.yml 
