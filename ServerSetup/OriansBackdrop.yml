@@ -6,16 +6,23 @@
   hosts: all
   tasks:
 
+  - name: check if backdrop exists
+    stat: 
+      path: /srv/www/htdocs/backdrop
+    register: backdrop_exists
+
   - name: Download Backdrop Release
     ansible.builtin.get_url:
       url: https://github.com/backdrop/backdrop/releases/download/1.24.1/backdrop.zip
       dest: /srv/www/htdocs/backdrop.zip
+    when: backdrop_exists.stat.exists == false
 
   - name: Extract Backdrop Release
     ansible.builtin.unarchive:
       src: /srv/www/htdocs/backdrop.zip
       dest: /srv/www/htdocs
       remote_src: yes
+    when: backdrop_exists.stat.exists == false
 
   - name: Change permissions for Backdrop Release
     ansible.builtin.file:
@@ -69,6 +76,14 @@
               AllowOverride All
            </Directory>
          </VirtualHost>
+
+  - name: Restart Apache2 service
+    ansible.builtin.systemd:
+      state: restarted
+      name: apache2
+
+  - name: Obtain SSL certificate
+    shell: certbot --agree-tos --apache -m ajorians@gmail.com -n -d www.orians.org
 
   - name: Restart Apache2 service
     ansible.builtin.systemd:

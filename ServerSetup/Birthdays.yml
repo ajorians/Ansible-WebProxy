@@ -18,7 +18,6 @@
       content: |
          <VirtualHost *:80>
            ServerAdmin webmaster@localhost
-           DocumentRoot /srv/www/htdocs/birthdays
            ServerName birthdays.orians.org
            ServerAlias birthdays
            <Directory /srv/www/htdocs/birthdays/src>
